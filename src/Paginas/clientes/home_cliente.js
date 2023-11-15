@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { FaBars } from 'react-icons/fa';
 
 
-const Home = () => {
+const HomeC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -12,7 +12,7 @@ const Home = () => {
   return (
     <div>
       <nav className='menu'>
-        <label className='logo'>Doctor</label>
+        <label className='logo'>Paciente</label>
         <ul className={`menu_items ${menuOpen ? 'show' : ''}`}>
           <li className='active'><Link to={"#"}>Inicio</Link></li>
           <li><Link to={"#"}>Perfil</Link></li>
@@ -28,11 +28,11 @@ const Home = () => {
       <div className='textW'>
         Bienvenid@: Nombre
       </div>
-      <div className='botonC'>
-        <Link to={"/citas"}>Citas</Link>
+      <div className='botonC2'>
+        <Link to={"/registrarCitas"}>Registre su cita aqui</Link>
       </div>
     </div>
   );
 }
 
-export default Home;
+export default HomeC;

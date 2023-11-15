@@ -1,0 +1,60 @@
+/* Estilos generales de la tabla */
+.tabla {
+    font-size: 14px;
+    width: 100%;
+    border-collapse: collapse; /* Combina los bordes de las celdas para un aspecto más limpio */
+}
+
+.cabeza {
+    background-color: rgba(107, 107, 107, 0.2);
+}
+
+th {
+    padding: 10px 1px; /* Reduzco el padding para ahorrar espacio */
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+td {
+    padding: 15px; /* Reduzco el padding para ahorrar espacio */
+    border-bottom: 1px solid rgba(107, 107, 107, 0.6);
+}
+.botonT{
+    width: 80px;
+    height: 42px;
+    background-color: crimson;
+    opacity: .8;
+    color: white;
+    border: none;
+    border-radius: 10px;
+}
+.botonT{
+
+}
+.botonT2{
+    width: 80px;
+    height: 42px;
+    background-color: rgb(20, 220, 20);
+    color: white;
+    border: none;
+    border-radius: 10px;
+}
+
+/* Estilos específicos para pantallas pequeñas */
+@media screen and (max-width: 437px) {
+    .cabeza {
+        display: table-row; /* Muestra la fila de encabezado en pantallas pequeñas */
+    }
+
+    tr {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        margin-bottom: 5px; /* Agrega espacio entre cada fila */
+    }
+
+    th, td {
+        width: 100%;
+        box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
+    }
+}

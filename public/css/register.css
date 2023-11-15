@@ -100,8 +100,6 @@ label{
 .control2 input[type="checkbox"]:checked {
     color: #0fbf12;
 }
-/* Media Queries for Responsive Design */
-/* Media Queries for Responsive Design */
 @media (max-width: 300px) {
     .form-container2 {
         width: 90%; /* Ajusta el ancho del contenedor */
@@ -136,4 +134,11 @@ label{
         width: 100%;
     }
     /* Ajusta la propiedad background-size para que la imagen se extienda hacia abajo y ocupe toda la pantalla */
+}
+@media screen and (max-width:437px) {
+    .form-container2 {
+        width: 400px; 
+        left: 50%; 
+        
+    }
 }

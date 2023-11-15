@@ -32,7 +32,7 @@ h1{
     display: block;
     padding: 10px;
     background: none;
-    color: #222;
+    color: #fff;
     border: none;
     border-bottom: 2px solid crimson;
     outline: none;
@@ -104,6 +104,17 @@ label{
 
 @media (max-width: 480px) {
     .form-container {
+        width: 100%;
+    }
+}
+@media (max-width: 437px) {
+    .form-container {
+        width: 400px;
+        left: 28%;
+    }
+    .section{
+        position: relative;
+        height: 100vh;
         width: 100%;
     }
 }

@@ -75,23 +75,48 @@ ul.show{
     margin-left: 47%;
     margin-top: 20px;
 }
+.botonC2{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 160px;
+    height: 50px;
+    background-color: crimson;
+    margin-left: 30%;
+    margin-top: 20px;
+}
+.botonC2 a{
+    text-decoration: none;
+    color: #ffff;
+    font-size: 22px;
+}
 .botonC a{
     text-decoration: none;
     color: white;
     font-size: 22px;
 }
-@media screen and(max-width: 305px) {
+@media screen and (max-width: 437px){
     .botonC{
-        margin-left: 30%;
+        margin-left: 38%;
+    }
+    .botonC2{
+        margin-left: 32%;
+        padding: 5px;
+    }
+    table {
+        width: 100%; /* Haz que la tabla ocupe todo el ancho disponible */
+        font-size: 9px; /* Ajusta el tamaño de la fuente según sea necesario */
+    }
+
+    th, td {
+        padding: 10px; /* Ajusta el espaciado de las celdas según sea necesario */
+        font-weight: 400;
     }
 }
-@media screen and(max-width:952px) {
-    .logo{
-        font-size: 30px;
-        padding-left: 35px;
-    }
-    .menu_items li a{
-        font-size: 16px;
+@media screen and (max-width: 305px) {
+    .botonC {
+        margin-left: 33%;
     }
 }
 @media screen and (max-width:858px) {
