@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaBars } from 'react-icons/fa';
 
 
-const Home = () => {
+const Home = ({ userName }) => {
+  const name = localStorage.getItem('name');
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -26,7 +27,7 @@ const Home = () => {
       <img src="perfil.png" />
       </div>
       <div className='textW'>
-        Bienvenid@: Nombre
+      Bienvenid@: {name || 'Invitado'}
       </div>
       <div className='botonC'>
         <Link to={"/citas"}>Citas</Link>
