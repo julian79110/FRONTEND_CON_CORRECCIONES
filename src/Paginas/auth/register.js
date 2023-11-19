@@ -28,13 +28,16 @@ const Register = () => {
         setSuccessMessage('Usuario creado con éxito');
         setError('');
         } catch (error) {
-            if (error.response && error.response.data && error.response.data.message) {
-              // Aquí accedes al mensaje específico del servidor
-              setError('Error: ' + error.response.data.message);
-            } else {
-              setError('Error en el registro: ' + error.message);
-            }
-            console.error('Error:', error);
+            if (error.response) {
+                console.log('Respuesta del servidor:', error.response);
+                if (error.response.data && error.response.data.message) {
+                  setError('Error: ' + error.response.data.message);
+                } else {
+                  setError('Error en el registro: ' + error.message);
+                }
+              } else {
+                setError('Error en el registro: ' + error.message);
+              }
           }
       };
 
@@ -111,7 +114,7 @@ const Register = () => {
                 <select name="role" value={rol} onChange={onChange}>
                     <option value="" selected hidden>rol</option>
                     <option value="doctor">Doctor</option>
-                    <option value="paciente">paciente</option>
+                    <option value="paciente">Paciente</option>
                 </select>
                 </div>
             </div>

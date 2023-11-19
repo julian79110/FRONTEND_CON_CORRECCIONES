@@ -25,6 +25,8 @@ app.use(express.json());
 // Rutas
 const usersRoutes = require('./routes/userRoutes');
 app.use('/api/v1/devcamps/users', usersRoutes);
+const citasRoutes = require('./routes/citasRoutes');
+app.use('/api/v1/devcamps/citas', citasRoutes);
 
 // Iniciar el servidor
 app.listen(puerto, () => {

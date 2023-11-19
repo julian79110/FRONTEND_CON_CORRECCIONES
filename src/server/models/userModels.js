@@ -16,6 +16,7 @@ const userSchema = new mongoose.Schema(
         },
         numeroDoc:{
             type:String,
+            unique: [true,"documento ya registrado"]
         },
         password:{
             type: String,
@@ -55,7 +56,8 @@ userSchema.methods.ObtenerTokenJWT= function(){
         id: this._id,
         name: this.name,
         password: this.password,
-        role: this.role
+        role: this.role,
+        numeroDoc: this.numeroDoc
     }, 
         JWT_SECRET_KEY, 
         { 

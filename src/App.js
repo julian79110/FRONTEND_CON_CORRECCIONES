@@ -6,6 +6,8 @@ import Home from './Paginas/admin/home';
 import Citas from './Paginas/admin/citas_admin';
 import HomeC from './Paginas/clientes/home_cliente';
 import RegistroCita from './Paginas/clientes/registroCitas';
+import VerCitas from './Paginas/clientes/verCitas';
+
 
 
 function App() {
@@ -19,6 +21,7 @@ function App() {
               <Route path="/citas" element={<Citas/>}></Route>
               <Route path="/homeC" element={<HomeC/>}></Route>
               <Route path="/registrarCitas" element={<RegistroCita/>}></Route>
+              <Route path="/verCitas" element={<VerCitas/>}></Route>
           </Routes>
       </Router>
    </Fragment>

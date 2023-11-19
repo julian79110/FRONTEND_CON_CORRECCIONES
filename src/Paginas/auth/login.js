@@ -24,34 +24,33 @@ const Login = () => {
         email,
         password:pass,
       });
-      console.log('Después de la solicitud'); // Añade esta línea
-
       if (response.data && response.data.token) {
         const tokenPayload = parseToken(response.data.token);
         if (tokenPayload && tokenPayload.role) {  
-            const { name, token } = tokenPayload;        
+            const { name, token, numeroDoc } = tokenPayload;        
           if (tokenPayload.role === 'doctor') {
             localStorage.setItem('token', token);
-          localStorage.setItem('name', name)
+            localStorage.setItem('name', name)
+            localStorage.setItem('numeroDoc', numeroDoc)
             navigate('/home');
           } else if (tokenPayload.role === 'paciente') {
+            localStorage.setItem('token', token);
+            localStorage.setItem('name', name);
             navigate('/homeC');
           }
         }
       }
       setError('');
-    } catch (error) {
-        console.error('Error en el inicio de sesión:', error);
-        
-        if (error.response) {
-          console.error('Respuesta del servidor:', error.response.data);
-        } else if (error.request) {
-          console.error('No se recibió respuesta del servidor:', error.request);
-        } else {
-          console.error('Error al configurar la solicitud:', error.message);
-        }
-      }
-    };
+  } catch (error) {
+    console.error('Error en el inicio de sesión:', error);
+
+    if (error.response && error.response.data && error.response.data.msg) {
+      setError('Error: ' + error.response.data.msg);
+    } else {
+      setError('Error en el inicio de sesión: ' + error.message);
+    }
+  }
+};
 
   return (
     <section>
