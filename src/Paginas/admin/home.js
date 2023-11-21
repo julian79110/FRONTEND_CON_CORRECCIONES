@@ -1,31 +1,97 @@
 import React, { useState,useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaBars } from 'react-icons/fa';
+import axios from 'axios';
 
 
 const Home = ({ userName }) => {
   const navigate = useNavigate();
   const name = localStorage.getItem('name');
+  const token = localStorage.getItem('token');
+  const doctorId = localStorage.getItem('doctorId'); // Obtén el ID del doctor
   const [menuOpen, setMenuOpen] = useState(false);
+  const [doctorData, setDoctorData] = useState(null);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
 
   const handleLogout = () => {
-    // Limpiar localStorage al cerrar sesión
     localStorage.removeItem('name');
-    // Redirigir a la página de inicio de sesión
-    // Puedes usar useHistory() o Link para redirigir según tu configuración de enrutamiento
-    navigate('/')
+    localStorage.removeItem('token');
+    navigate('/');
   };
+
+  const handleProfileClick = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8888/api/v1/devcamps/users/doctores/${doctorId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      if (response.data && response.data.success) {
+        setDoctorData(response.data.data);
+      }
+    } catch (error) {
+      console.error('Error al obtener datos del doctor:', error);
+    }
+  };
+  
+  const handleUpdateProfile = async (e) => {
+    e.preventDefault();
+    const updatedData = {
+      name: e.target.name.value,
+      email: e.target.email.value,
+      password: e.target.password.value,
+      disponibilidad: e.target.disponibilidad.value === 'true',
+    };
+
+    try {
+      const response = await axios.patch(`http://localhost:8888/api/v1/devcamps/users/${doctorId}`, updatedData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.data && response.data.success) {
+        setDoctorData(response.data.data);
+        alert('Perfil actualizado exitosamente');
+      }
+    } catch (error) {
+      console.error('Error al actualizar el perfil:', error);
+      alert('Error al actualizar el perfil');
+    }
+  };
+
+  useEffect(() => {
+    // Hacer la solicitud de datos del doctor cuando el componente se monta
+    const fetchDoctorData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8888/api/v1/devcamps/users/doctores/${doctorId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.data && response.data.success) {
+          setDoctorData(response.data.data);
+        }
+      } catch (error) {
+        console.error('Error al obtener datos del doctor:', error);
+      }
+    };
+
+    fetchDoctorData();
+  }, [token]); // Ejecutar solo cuando el token cambie
+
+
   return (
     <div>
       <nav className='menu'>
         <label className='logo'>Doctor</label>
         <ul className={`menu_items ${menuOpen ? 'show' : ''}`}>
           <li className='active'><Link to={"#"}>Inicio</Link></li>
-          <li><Link to={"#"}>Perfil</Link></li>
           <li><button onClick={handleLogout}>Cerrar Sesion</button></li>
         </ul>
         <span className={`btn_menu ${menuOpen ? 'hide' : ''}`} onClick={toggleMenu}>
@@ -39,9 +105,37 @@ const Home = ({ userName }) => {
       Bienvenid@: {name || 'Invitado'}
       </div>
       <div className='botonC'>
-        <Link to={"/citas"}>Citas</Link>
+        <Link to={"/citas"}>Ver Citas</Link><br></br>
       </div>
-    </div>
+      <div className='form-container4'>
+        <h1>Actualizar</h1>
+        <form autoComplete='off' onSubmit={handleUpdateProfile}>
+          {/* Campos del formulario */}
+          <div className='control3'>
+            <label>Nombre</label>
+            <input type='text' name='name' id='name' defaultValue={doctorData?.name} />
+          </div>
+          <div className='control3'>
+            <label>Correo</label>
+            <input type='text' name='email' id='email' defaultValue={doctorData?.email} />
+          </div>
+          <div className='control3'>
+            <label>Password</label>
+            <input type='password' name='password' id='fechaCita' />
+          </div>
+          <div className='control3'>
+            <select name="disponibilidad" defaultValue={doctorData?.disponibilidad ? 'true' : 'false'}>
+              <option value="" hidden>Disponibilidad</option>
+              <option value="true">Disponible</option>
+              <option value="false">No disponible</option>
+            </select>
+          </div>
+          <div className='control3'>
+            <input type='submit' value='Actualizar' />
+          </div>
+        </form>
+      </div>
+        </div>
   );
 }
 

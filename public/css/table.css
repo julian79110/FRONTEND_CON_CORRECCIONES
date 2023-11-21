@@ -81,9 +81,12 @@ tbody td:hover:before{
     align-items: center;
     justify-content: center;
     text-align: center;
-    background-color: rgb(165, 165, 165);
+    background-color: rgb(52, 52, 52);
     padding: 40px;
   }
+.modal-content h2{
+    color: #fff;
+}
 .modal-content input{
     font-size: 16px;
     overflow: hidden;

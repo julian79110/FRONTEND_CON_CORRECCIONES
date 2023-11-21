@@ -49,7 +49,6 @@ const Citas = () => {
         <label className='logo'>Nombre</label>
         <ul className={`menu_items ${menuOpen ? 'show' : ''}`}>
           <li className='active'><Link to={"/home"}>Inicio</Link></li>
-          <li><Link to={"#"}>Perfil</Link></li>
           <li><Link to={"/"}>Cerrar Sesion</Link></li>
         </ul>
         <span className={`btn_menu ${menuOpen ? 'hide' : ''}`} onClick={toggleMenu}>

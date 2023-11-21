@@ -31,6 +31,10 @@ const userSchema = new mongoose.Schema(
                 "doctor"
             ]
         },
+        disponibilidad: {
+            type: Boolean,
+            default: true, // Puedes establecer el valor predeterminado según tus necesidades
+        },
         createdAt:{
             type: Date,
             default: Date.now

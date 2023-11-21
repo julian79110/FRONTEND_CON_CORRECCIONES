@@ -97,9 +97,10 @@ ul.show{
     font-size: 22px;
 }
 li button{
+    margin-top: 5px;
     color: #fff;
     border: none;
-    font-size: 14px;
+    font-size: 17px;
     background-color: transparent;
     cursor: pointer;
 }

@@ -29,9 +29,10 @@ const Login = () => {
         if (tokenPayload && tokenPayload.role) {  
             const { name, token, numeroDoc } = tokenPayload;        
           if (tokenPayload.role === 'doctor') {
-            localStorage.setItem('token', token);
-            localStorage.setItem('name', name)
-            localStorage.setItem('numeroDoc', numeroDoc)
+            localStorage.setItem('token', response.data.token);
+        localStorage.setItem('name', tokenPayload.name);
+        localStorage.setItem('numeroDoc', tokenPayload.numeroDoc);
+        localStorage.setItem('doctorId', tokenPayload.id); // Almacena el ID del doctor
             navigate('/home');
           } else if (tokenPayload.role === 'paciente') {
             localStorage.setItem('token', token);

@@ -1,6 +1,6 @@
 .form-container3{
     position: absolute;
-    top: 60%;
+    top: 75%;
     left: 50%;
     transform: translate(-50%, -50%);
     background: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6));
@@ -8,6 +8,18 @@
     padding: 50px 30px;
     border-radius: 10px;
     box-shadow: 2px 2px 20px rgb(117, 10, 31);
+}
+.form-container4{
+    position: absolute;
+    top: 140%;
+    left: 20%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6));
+    width: 400px;
+    padding: 50px 30px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 20px rgb(117, 10, 31);
+    font-size: 14px;
 }
 h1{
     text-transform: uppercase;

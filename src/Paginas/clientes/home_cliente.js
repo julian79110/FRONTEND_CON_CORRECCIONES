@@ -28,7 +28,6 @@ const HomeC = ({userName}) => {
         <ul className={`menu_items ${menuOpen ? 'show' : ''}`}>
           <li className='active'><Link to={"#"}>Inicio</Link></li>
           <li><Link to={"/verCitas"}>Ver Citas</Link></li>
-          <li><Link to={"#"}>Perfil</Link></li>
           <li><button onClick={handleLogout}>Cerrar Sesion</button></li>
         </ul>
         <span className={`btn_menu ${menuOpen ? 'hide' : ''}`} onClick={toggleMenu}>
