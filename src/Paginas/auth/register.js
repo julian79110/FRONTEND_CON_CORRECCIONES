@@ -10,7 +10,7 @@ const Register = () => {
         numeroDoc: '',
         password: '',
         tipoDoc: '',
-        role: '',
+        role: 'paciente',
       });
     
       const { name, email, numeroDoc, password, tipoDoc, role } = usuario;
@@ -90,25 +90,15 @@ const Register = () => {
                 <label>Email</label>
                 <input type='text' name='email' id='email' onChange={onChange} value={email} required />
                 </div>
-            </div>
-
-            {/* Segundo grupo de campos */}
-            <div className='form-column'>
-                <div className='control2'>
-                <label>Numero De Documento</label>
-                <input type='text' name='numeroDoc' id='doc' onChange={onChange} value={numeroDoc} required />
-                </div>
                 <div className='control2'>
                 <label>Contraseña</label>
                 <input type='password' name='password' id='pass' onChange={onChange} value={password} required />
                 </div>
             </div>
-            </div>
 
-            {/* Tercer grupo de campos */}
-            <div className='form-row'>
+            {/* Segundo grupo de campos */}
             <div className='form-column'>
-                <div className='control2'>
+            <div className='control2'>
                 <select name="tipoDoc" value={tipoDoc} onChange={onChange}>
                     <option value="" selected hidden>Tipo De Documento</option>
                     <option value="ti">Tarjeta de identidad</option>
@@ -116,17 +106,28 @@ const Register = () => {
                     <option value="pp">pasaporte</option>
                 </select>
                 </div>
+                <div className='control2'>
+                <label>Numero De Documento</label>
+                <input type='text' name='numeroDoc' id='doc' onChange={onChange} value={numeroDoc} required />
+                </div>
+                
+            </div>
+            </div>
+
+            {/* Tercer grupo de campos */}
+            <div className='form-row'>
+            <div className='form-column'>
+                
             </div>
             <div className='form-column'>
-                <div className='control2'>
-                <select name="role" value={role} onChange={onChange}>
-                    <option value="" selected hidden>rol</option>
-                    <option value="doctor">Doctor</option>
-                    <option value="paciente">Paciente</option>
-                </select>
+            <div className='control2'>
+                  <input type="hidden" readOnly name="role" value={role} onChange={onChange}></input>
                 </div>
+            
             </div>
             </div>
+
+            
 
             <div className='control2'>
             <input type='submit' value='Registrarse' />

@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema(
         },
         email:{
             type: String,
+            unique:true,
             match: [
                 /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/,
                 "email no valido"
@@ -28,7 +29,8 @@ const userSchema = new mongoose.Schema(
             type:String,
             enum:[
                 "paciente",
-                "doctor"
+                "doctor",
+                "admin"
             ]
         },
         disponibilidad: {
@@ -51,7 +53,7 @@ userSchema.pre('save', async function(next){
                    hash(this.password, sal)
 })
 
-//metodo construye el json web token (no)
+//metodo construye el json web token
 
 
 userSchema.methods.ObtenerTokenJWT= function(){

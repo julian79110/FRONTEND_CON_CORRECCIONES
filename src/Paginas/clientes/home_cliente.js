@@ -41,7 +41,7 @@ const HomeC = ({userName}) => {
       Bienvenid@: {name || 'Invitado'}<br />
       </div>
       <div className='botonC2'>
-        <Link to="/registrarCitas" state={{ userName: name }}>
+        <Link to="/registrarCitas">
           Registre su cita aquí
         </Link>
       </div>

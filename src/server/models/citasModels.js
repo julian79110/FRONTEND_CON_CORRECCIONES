@@ -16,6 +16,9 @@ const citaSchema = new mongoose.Schema(
        horaCita:{
             type:String,
             unique:true
+       },
+       doctorAsignado:{
+          type:String
        }
 
     }

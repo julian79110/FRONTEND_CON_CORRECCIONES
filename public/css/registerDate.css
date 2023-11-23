@@ -65,6 +65,12 @@ label{
     text-align: center;
     color: #fff;
 }
+.mensajeError2{
+    color: white;
+    font-size: 18px;
+    background-color: crimson;
+    padding: 10px;
+}
 @media screen and (max-width: 437px) {
     .form-container3{
         position: absolute;

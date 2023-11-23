@@ -4,7 +4,8 @@ import { FaBars } from 'react-icons/fa';
 import axios from "axios";
 import Modal from 'react-modal';
 
-const VerCitas = () => {
+const VerCitas = ({userName}) => {
+  
   const [menuOpen, setMenuOpen] = useState(false);
   const [citas, setCitas] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -13,14 +14,16 @@ const VerCitas = () => {
     nombre: "",
     numeroDocumento: "",
     fechaCita: "",
-    horaCita: ""
+    horaCita: "",
+    doctorAsignado:""
   });
   const [mensajeExito, setMensajeExito] = useState("");
 
   useEffect(() => {
     const fetchCitas = async () => {
       try {
-        const response = await axios.get("http://localhost:8888/api/v1/devcamps/citas");
+        const numeroDocumento = localStorage.getItem('numeroDoc');
+        const response = await axios.get(`http://127.0.0.1:8888/api/v1/devcamps/citas/busqueda/${numeroDocumento}`);
         setCitas(response.data.results);
       } catch (error) {
         console.error("Error al obtener citas:", error);
@@ -140,6 +143,7 @@ const VerCitas = () => {
               <th scope="col">Número de Documento</th>
               <th scope="col">Fecha de Cita</th>
               <th scope="col">Hora de Cita</th>
+              <th scope="col">Doctor</th>
               <th scope="col">Eliminar</th>
               <th scope="col">Editar</th>
             </tr>
@@ -152,6 +156,7 @@ const VerCitas = () => {
                 <td>{cita.numeroDocumento}</td>
                 <td>{cita.fechaCita}</td>
                 <td>{cita.horaCita}</td>
+                <td>{cita.doctorAsignado}</td>
                 <td>
                   <button className="eliminar" onClick={() => handleEliminarCita(cita._id)}>
                     Eliminar

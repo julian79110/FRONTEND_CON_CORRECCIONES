@@ -87,27 +87,65 @@ router.get('/:id',
         }
 })
 
+//traer usuario a traves del numero de documento: 
+
+router.get('/busqueda/:numeroDocumento',
+    async (request, response) => {
+        try {
+            const numeroDocumento = request.params.numeroDocumento;
+
+            if (!numeroDocumento) {
+                return response.status(400).json({
+                    success: false,
+                    msg: "Se requiere el número de documento para buscar citas."
+                });
+            }
+
+            const citasUsuario = await citasModel.find({ numeroDocumento: numeroDocumento });
+
+            if (!citasUsuario || citasUsuario.length === 0) {
+                return response.status(404).json({
+                    success: false,
+                    msg: `No se encontraron citas para el usuario con número de documento ${numeroDocumento}.`
+                });
+            }
+
+            response.status(200).json({
+                success: true,
+                results: citasUsuario
+            });
+        } catch (error) {
+            console.error("Error interno del servidor:", error);
+            response.status(500).json({
+                success: false,
+                msg: "Error interno del servidor"
+            });
+        }
+    }
+);
+
 router.post('/',
      async(request, response)=>{
         try {
-            //crear la cita
-            const citas = await citasModel.create(request.body)
-
-            response
-                    .status(201)
-                    .json({
-                        "success": true, 
-                        msg: "cita creada con exito!"
-                    })
-            
-        } catch (error) {
-            response
-                .status(500)
-                .json({
-                    success: false,
-                    msg: error.message
-                })
-        }        
+            // Crear la cita, asegurándote de incluir doctorAsignado en el objeto
+            const cita = await citasModel.create({
+              nombre: request.body.nombre,
+              numeroDocumento: request.body.numeroDocumento,
+              fechaCita: request.body.fechaCita,
+              horaCita: request.body.horaCita,
+              doctorAsignado: request.body.doctorAsignado, // Asegúrate de incluir este campo
+            });
+        
+            response.status(201).json({
+              success: true,
+              msg: 'Cita creada con éxito!',
+            });
+          } catch (error) {
+            response.status(500).json({
+              success: false,
+              msg: error.message,
+            });
+          }
 })
 
 //actualizar bootcamp por id

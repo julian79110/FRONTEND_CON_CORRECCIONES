@@ -1,25 +1,28 @@
-import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { FaBars } from 'react-icons/fa';
 import axios from 'axios';
 
-const RegistroCita = () => {  
+const RegistroCita = ({userName}) => {  
+  const name = localStorage.getItem('name');
+  const documento = localStorage.getItem('numeroDoc')
   const [cita, setCita] = useState({
     nombre: '',
     numeroDocumento: '',
     fechaCita: '',
     horaCita: '',
+    doctorAsignado: ''
   });
 
-  const { nombre, numeroDocumento, fecha, hora } = cita;
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
-  const location = useLocation();
+
 
   const registerCita = async () => {
     try {
-      const { nombre, numeroDocumento, fechaCita, horaCita } = cita;
+      const { nombre, numeroDocumento, fechaCita, horaCita, doctorAsignado } = cita;
+      
   
       // Buscar doctores con disponibilidad
       const responseDoctores = await axios.get(
@@ -35,11 +38,11 @@ const RegistroCita = () => {
         const responseCita = await axios.post(
           'http://localhost:8888/api/v1/devcamps/citas',
           {
-            nombre,
-            numeroDocumento,
+            nombre:name,
+            numeroDocumento:documento,
             fechaCita,
             horaCita,
-            doctorId,
+            doctorAsignado
           },
           {
             headers: {
@@ -78,7 +81,7 @@ const RegistroCita = () => {
         ) {
           setError('Error: ' + error.response.data.message);
         } else {
-          setError('Error: fecha y hora agendadas, solo puedes registrar una cita');
+          setError('Error: ya tiene agendada una cita. La fecha o la hora ya estan registradas');
         }
       } else {
         setError('Error en el : ' + error.message);
@@ -87,10 +90,21 @@ const RegistroCita = () => {
   };
 
   const onChange = (e) => {
-    setCita({
-      ...cita,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+  
+    // Verifica si el campo que cambió es el campo del doctor y actualiza el estado en consecuencia
+    if (name === 'doctorAsignado') {
+      setCita((prevCita) => ({
+        ...prevCita,
+        [name]: value,
+      }));
+    } else {
+      // Si no es el campo del doctor, actualiza los demás campos normalmente
+      setCita({
+        ...cita,
+        [name]: value,
+      });
+    }
   };
 
   const onSubmit = (e) => {
@@ -110,6 +124,30 @@ const RegistroCita = () => {
     window.location.href = '/';
   };
 
+  // Agrega un nuevo estado para almacenar la lista de doctores disponibles
+  const [doctoresDisponibles, setDoctoresDisponibles] = useState([]);
+
+  useEffect(() => {
+    // Función asincrónica para obtener doctores disponibles
+    const fetchDoctoresDisponibles = async () => {
+      try {
+        const response = await axios.get(
+          'http://localhost:8888/api/v1/devcamps/users/disponibles?disponibilidad=true&role=doctor'
+        );
+
+        if (response.data.success) {
+          setDoctoresDisponibles(response.data.data);
+        }
+      } catch (error) {
+        console.error('Error al obtener doctores disponibles:', error);
+      }
+    };
+
+    // Llama a la función para obtener doctores disponibles al cargar el componente
+    fetchDoctoresDisponibles();
+  }, []); // La dependencia es un arreglo vacío para ejecutar solo una vez al montar el componente
+
+
   return (
     <div>
       <nav className='menu'>
@@ -125,7 +163,7 @@ const RegistroCita = () => {
       <div className='form-container3'>
         <h1>Registro</h1>
         {error && (
-          <div className='mensajeE'>
+          <div className='mensajeError2'>
             {error}
           </div>
         )}
@@ -137,20 +175,31 @@ const RegistroCita = () => {
         <form autoComplete='off' onSubmit={onSubmit}>
           <div className='control3'>
             <label>Nombres Y Apellidos</label>
-            <input type='text' name='nombre' id='nombre' onChange={onChange} value={cita.nombre} />
+            <input type='text' name='nombre' id='nombre' onChange={onChange} value={name} required readOnly />
           </div>
           <div className='control3'>
             <label>Numero De Documento</label>
-            <input type='text' name='numeroDocumento' id='numeroDocumento' onChange={onChange} value={cita.numeroDocumento} />
+            <input type='text' name='numeroDocumento' id='numeroDocumento'  readOnly required onChange={onChange} value={documento} />
           </div>
           <div className='control3'>
             <label>Fecha De La Cita</label>
-            <input type='date' name='fechaCita' id='fechaCita' onChange={onChange} value={cita.fechaCita} />
+            <input type='date' name='fechaCita' id='fechaCita' required onChange={onChange} value={cita.fechaCita} />
           </div>
           <div className='control3'>
             <label>Hora De La Cita</label>
-            <input type='time' name='horaCita' id='horaCita' onChange={onChange} value={cita.horaCita} />
+            <input type='time' name='horaCita' id='horaCita' required onChange={onChange} value={cita.horaCita} />
           </div>
+          {/* Agrega un bloque de código para mostrar la lista de doctores disponibles */}
+        {doctoresDisponibles.length > 0 && (
+          <div className='doctoresDisponibles'>
+            <h2>Doctores Disponibles</h2>
+            <select name="doctorAsignado" onChange={onChange}>
+              {doctoresDisponibles.map((doctor) => (
+                <option key={doctor._id} value={doctor.name}>{doctor.name}</option>
+              ))}
+            </select>
+          </div>
+        )}
           <div className='control3'>
             <input type='submit' value='Agenda' />
           </div>

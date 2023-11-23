@@ -27,16 +27,17 @@ const Login = () => {
       if (response.data && response.data.token) {
         const tokenPayload = parseToken(response.data.token);
         if (tokenPayload && tokenPayload.role) {  
-            const { name, token, numeroDoc } = tokenPayload;        
+            const { name, token } = tokenPayload;        
           if (tokenPayload.role === 'doctor') {
             localStorage.setItem('token', response.data.token);
-        localStorage.setItem('name', tokenPayload.name);
-        localStorage.setItem('numeroDoc', tokenPayload.numeroDoc);
-        localStorage.setItem('doctorId', tokenPayload.id); // Almacena el ID del doctor
+            localStorage.setItem('name', tokenPayload.name);
+            localStorage.setItem('numeroDoc', tokenPayload.numeroDoc);
             navigate('/home');
           } else if (tokenPayload.role === 'paciente') {
             localStorage.setItem('token', token);
             localStorage.setItem('name', name);
+            localStorage.setItem('numeroDoc', tokenPayload.numeroDoc);
+            localStorage.setItem('id', tokenPayload._id);
             navigate('/homeC');
           }
         }
