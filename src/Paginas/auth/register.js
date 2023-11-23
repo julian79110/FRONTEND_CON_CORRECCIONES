@@ -10,7 +10,7 @@ const Register = () => {
         numeroDoc: '',
         password: '',
         tipoDoc: '',
-        role: 'paciente',
+        role: 'admin',
       });
     
       const { name, email, numeroDoc, password, tipoDoc, role } = usuario;

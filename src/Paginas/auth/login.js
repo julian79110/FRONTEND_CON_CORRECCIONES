@@ -32,6 +32,8 @@ const Login = () => {
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('name', tokenPayload.name);
             localStorage.setItem('numeroDoc', tokenPayload.numeroDoc);
+            localStorage.setItem('email', tokenPayload.email);
+            localStorage.setItem('id', tokenPayload._id);
             navigate('/home');
           } else if (tokenPayload.role === 'paciente') {
             localStorage.setItem('token', token);
@@ -39,6 +41,12 @@ const Login = () => {
             localStorage.setItem('numeroDoc', tokenPayload.numeroDoc);
             localStorage.setItem('id', tokenPayload._id);
             navigate('/homeC');
+          } else if (tokenPayload.role === 'admin'){
+            localStorage.setItem('token', token)
+            localStorage.setItem('name',name)
+            localStorage.setItem('numeroDoc', tokenPayload.numeroDoc)
+            localStorage.setItem('id', tokenPayload._id)
+            navigate('/admin')
           }
         }
       }

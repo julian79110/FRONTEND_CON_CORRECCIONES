@@ -124,6 +124,41 @@ router.get('/busqueda/:numeroDocumento',
     }
 );
 
+router.get('/busquedaD/:doctorAsignado',
+    async (request, response) => {
+        try {
+            const doctorAsignado = request.params.doctorAsignado;
+
+            if (!doctorAsignado) {
+                return response.status(400).json({
+                    success: false,
+                    msg: "Se requiere el número de documento para buscar citas."
+                });
+            }
+
+            const citasDoctor = await citasModel.find({ doctorAsignado: doctorAsignado });
+
+            if (!citasDoctor || citasDoctor.length === 0) {
+                return response.status(404).json({
+                    success: false,
+                    msg: `No se encontraron citas para el usuario con número de documento ${citasDoctor}.`
+                });
+            }
+
+            response.status(200).json({
+                success: true,
+                results: citasDoctor
+            });
+        } catch (error) {
+            console.error("Error interno del servidor:", error);
+            response.status(500).json({
+                success: false,
+                msg: "Error interno del servidor"
+            });
+        }
+    }
+);
+
 router.post('/',
      async(request, response)=>{
         try {

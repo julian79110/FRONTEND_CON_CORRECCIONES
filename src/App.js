@@ -7,6 +7,8 @@ import Citas from './Paginas/admin/citas_admin';
 import HomeC from './Paginas/clientes/home_cliente';
 import RegistroCita from './Paginas/clientes/registroCitas';
 import VerCitas from './Paginas/clientes/verCitas';
+import HomeA from './Paginas/admin/homeA';
+import ActualizarD from './Paginas/admin/actualizar';
 
 
 
@@ -22,6 +24,8 @@ function App() {
               <Route path="/homeC" element={<HomeC/>}></Route>
               <Route path="/registrarCitas" element={<RegistroCita/>}></Route>
               <Route path="/verCitas" element={<VerCitas/>}></Route>
+              <Route path="/admin" element={<HomeA/>}></Route>
+              <Route path="/actualizar" element={<ActualizarD/>}></Route>
           </Routes>
       </Router>
    </Fragment>

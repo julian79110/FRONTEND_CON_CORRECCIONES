@@ -8,7 +8,7 @@ const Home = ({ userName }) => {
   const navigate = useNavigate();
   const name = localStorage.getItem('name');
   const token = localStorage.getItem('token');
-  const doctorId = localStorage.getItem('doctorId'); // Obtén el ID del doctor
+  const doctorId = localStorage.getItem('doctorId');
   const [menuOpen, setMenuOpen] = useState(false);
   const [doctorData, setDoctorData] = useState(null);
 
@@ -64,7 +64,7 @@ const Home = ({ userName }) => {
     }
   };
 
-  useEffect(() => {
+useEffect(() => {
     // Hacer la solicitud de datos del doctor cuando el componente se monta
     const fetchDoctorData = async () => {
       try {
@@ -107,33 +107,8 @@ const Home = ({ userName }) => {
       <div className='botonC'>
         <Link to={"/citas"}>Ver Citas</Link><br></br>
       </div>
-      <div className='form-container4'>
-        <h1>Actualizar</h1>
-        <form autoComplete='off' onSubmit={handleUpdateProfile}>
-          {/* Campos del formulario */}
-          <div className='control3'>
-            <label>Nombre</label>
-            <input type='text' name='name' id='name' defaultValue={doctorData?.name} />
-          </div>
-          <div className='control3'>
-            <label>Correo</label>
-            <input type='text' name='email' id='email' defaultValue={doctorData?.email} />
-          </div>
-          <div className='control3'>
-            <label>Password</label>
-            <input type='password' name='password' id='fechaCita' />
-          </div>
-          <div className='control3'>
-            <select name="disponibilidad" defaultValue={doctorData?.disponibilidad ? 'true' : 'false'}>
-              <option value="" hidden>Disponibilidad</option>
-              <option value="true">Disponible</option>
-              <option value="false">No disponible</option>
-            </select>
-          </div>
-          <div className='control3'>
-            <input type='submit' value='Actualizar' />
-          </div>
-        </form>
+      <div className='botonC'>
+        <Link to={"/actualizar"}>Actualizar</Link><br></br>
       </div>
         </div>
   );

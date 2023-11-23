@@ -63,6 +63,7 @@ userSchema.methods.ObtenerTokenJWT= function(){
         name: this.name,
         password: this.password,
         role: this.role,
+        email: this.email,
         numeroDoc: this.numeroDoc
     }, 
         JWT_SECRET_KEY, 

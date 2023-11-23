@@ -4,6 +4,7 @@ import { FaBars } from 'react-icons/fa';
 import axios from 'axios';
 
 const Citas = () => {
+  const id = localStorage.getItem('id')
   const [menuOpen, setMenuOpen] = useState(false);
   const [citas, setCitas] = useState([]);
   const [mensajeExito, setMensajeExito] = useState("");
@@ -11,7 +12,8 @@ const Citas = () => {
   useEffect(() => {
     const fetchCitas = async () => {
       try {
-        const response = await axios.get("http://localhost:8888/api/v1/devcamps/citas");
+        const name = localStorage.getItem('name')
+        const response = await axios.get(`http://localhost:8888/api/v1/devcamps/citas/busquedaD/${name}`);
         setCitas(response.data.results);
       } catch (error) {
         console.error("Error al obtener citas:", error);
