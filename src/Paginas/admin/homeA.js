@@ -23,7 +23,7 @@ const HomeA = () => {
         <label className='logo'>Admin</label>
         <ul className={`menu_items ${menuOpen ? 'show' : ''}`}>
           <li className='active'><Link to={"#"}>Inicio</Link></li>
-          <li><Link to={"#"}>Ver usuarios</Link></li>
+          <li><Link to={"/verUsuarios"}>Ver usuarios</Link></li>
           <li><button onClick={handleLogout}>Cerrar Sesion</button></li>
         </ul>
         <span className={`btn_menu ${menuOpen ? 'hide' : ''}`} onClick={toggleMenu}>
@@ -37,7 +37,7 @@ const HomeA = () => {
       Bienvenid@: {name || 'Invitado'}
       </div>
       <div className='botonC'>
-        <Link to={"#"}>Registro</Link><br></br>
+        <Link to={"/registerA"}>Registro</Link><br></br>
       </div>
 
       </div>

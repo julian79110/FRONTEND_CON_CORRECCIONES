@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const moongose = require('mongoose')
 const userModel = require ('../models/userModels')
 
 router.post('/register', 
@@ -59,10 +60,10 @@ router.get('/disponibles', async (req, res) => {
     }
   });
 
-  router.patch('/:id', async (req, res) => {
+  router.put('/actualizarDoctor/:numeroDoc', async (req, res) => {
     try {
-        const doctorId = req.params.id;
-        const { name, email, password, disponibilidad } = req.body;
+        const numeroDoc = req.params.numeroDoc;
+        const { name, email, password } = req.body;
 
         // Construir un objeto con los campos que se pueden actualizar
         const updateFields = {};
@@ -75,12 +76,22 @@ router.get('/disponibles', async (req, res) => {
         if (password) {
             updateFields.password = password;
         }
-        if (disponibilidad !== undefined) {
-            updateFields.disponibilidad = disponibilidad;
+
+        // Validar que numeroDoc sea único
+        const existingDoctor = await userModel.findOne({ numeroDoc });
+        if (!existingDoctor) {
+            return res.status(404).json({
+                success: false,
+                message: 'Doctor no encontrado',
+            });
         }
 
         // Actualizar los campos especificados del doctor
-        const updatedDoctor = await userModel.findByIdAndUpdate(doctorId, updateFields, { new: true });
+        const updatedDoctor = await userModel.findOneAndUpdate(
+            { numeroDoc }, // Usar el campo numeroDoc para buscar
+            updateFields,
+            { new: true }
+        );
 
         if (!updatedDoctor) {
             return res.status(404).json({
@@ -101,6 +112,8 @@ router.get('/disponibles', async (req, res) => {
         });
     }
 });
+
+  
 
            // Ruta para obtener datos del usuario por ID
 router.get('/doctores/:id', async (req, res) => {
@@ -126,6 +139,105 @@ router.get('/doctores/:id', async (req, res) => {
       });
     }
   });
+
+   // listar usuarios
+  router.get('/listar', async (req, res) => {
+  try {
+   
+    const usuarios = await userModel.find();
+
+    res.status(200).json({
+      success: true,
+      data: usuarios,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+});
+
+// Ruta para eliminar un usuario por ID
+router.delete('/eliminar/:id', async (req, res) => {
+    try {
+        const userId = req.params.id;
+
+        // Verificar si el usuario existe
+        const user = await userModel.findById(userId);
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'Usuario no encontrado',
+            });
+        }
+
+        // Eliminar el usuario
+        await userModel.findByIdAndDelete(userId);
+
+        res.status(200).json({
+            success: true,
+            message: 'Usuario eliminado con éxito',
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+});
+
+//actualizar bootcamp por id
+router.put('/actualizar/:id',
+  async (request, response)=>{
+    try {
+        const bootcampId= request.params.id
+
+        if(!moongose.Types.ObjectId.isValid(bootcampId)){
+            response
+            .status(500)
+            .json({
+                success: false,
+                msg: "Id invalido"
+            })
+        }else{
+            const updBootcamp = await userModel.findByIdAndUpdate(
+                bootcampId, 
+                request.body,
+                {
+                    new:true
+                }  
+            )
+
+            if (!updBootcamp) {
+                return response
+                    .status(404)
+                    .json({
+                        success: false,
+                        msg:`No se encuentra el usuario con id: ${bootcampId}`
+                    })
+                
+            }
+            else{
+                response
+                .status(200)
+                .json({
+                    "success": true, 
+                    "results": updBootcamp
+                })
+            }
+        }
+        
+    } catch (error) {
+        response
+                .status(500)
+                .json({
+                    success: false,
+                    msg: "Error interno del servidor"
+                })   
+    }
+})
+
   
 //login 
 router.post('/login', async (req, res) => {

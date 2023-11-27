@@ -7,7 +7,6 @@ const citaSchema = new mongoose.Schema(
        },
        numeroDocumento:{
             type:String,
-            unique:true
        },
        fechaCita:{
             type:String,
@@ -19,7 +18,12 @@ const citaSchema = new mongoose.Schema(
        },
        doctorAsignado:{
           type:String
-       }
+       },
+       estado: {
+          type: String,
+          default: "programada", 
+          enum: ["programada", "cancelada", "atendida"] 
+        }
 
     }
 )

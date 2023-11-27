@@ -19,7 +19,18 @@ section{
     background: transparent;
     border: 1px solid crimson ;
     box-shadow: 2px 2px 20px rgb(117, 10, 31);
-  }
+}
+.form-containerA {
+    color: #060606;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-top: 50px;
+    background: rgb(95, 94, 94);
+    border: 1px solid crimson ;
+    box-shadow: 2px 2px 20px rgb(117, 10, 31);
+}
   
   .form-column {
     width: 50%;

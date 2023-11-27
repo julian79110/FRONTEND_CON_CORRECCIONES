@@ -42,16 +42,26 @@ const VerCitas = ({userName}) => {
     window.location.href = '/';
   };
 
-  const handleEliminarCita = async (citaId) => {
-    const confirmacion = window.confirm("¿Estás seguro de que deseas eliminar esta cita?");
+  const handleCancelarCita = async (citaId) => {
+    const confirmacion = window.confirm("¿Estás seguro de que deseas cancelar esta cita?");
     if (confirmacion) {
       try {
-        await axios.delete(`http://localhost:8888/api/v1/devcamps/citas/${citaId}`);
-        const updatedCitas = citas.filter((cita) => cita._id !== citaId);
+        await axios.put(`http://localhost:8888/api/v1/devcamps/citas/cancelarCita/${citaId}`);
+        const updatedCitas = citas.map((cita) => {
+          if (cita._id === citaId) {
+            return {
+              ...cita,
+              estado: "cancelada",
+              doctorAsignado: "n/a"
+            };
+          }
+          return cita;
+        });
+  
         setCitas(updatedCitas);
-        setMensajeExito("Cita eliminada con éxito.");
+        setMensajeExito("Cita cancelada con éxito.");
       } catch (error) {
-        console.error("Error al eliminar la cita:", error);
+        console.error("Error al cancelar la cita:", error);
       }
     }
   };
@@ -144,8 +154,8 @@ const VerCitas = ({userName}) => {
               <th scope="col">Fecha de Cita</th>
               <th scope="col">Hora de Cita</th>
               <th scope="col">Doctor</th>
-              <th scope="col">Eliminar</th>
-              <th scope="col">Editar</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Cancelar</th>
             </tr>
           </thead>
           <tbody>
@@ -157,15 +167,13 @@ const VerCitas = ({userName}) => {
                 <td>{cita.fechaCita}</td>
                 <td>{cita.horaCita}</td>
                 <td>{cita.doctorAsignado}</td>
+                <td>{cita.estado}</td>
                 <td>
-                  <button className="eliminar" onClick={() => handleEliminarCita(cita._id)}>
-                    Eliminar
+                  <button className="eliminar" onClick={() => handleCancelarCita(cita._id)}>
+                    Cancelar
                   </button>
                 </td>
                 <td>
-                  <button className="editar" onClick={() => handleEditarCita(cita)}>
-                    Editar
-                  </button>
                 </td>
               </tr>
             ))}

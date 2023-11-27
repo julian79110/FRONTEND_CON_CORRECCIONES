@@ -45,6 +45,31 @@ const Citas = () => {
       }
     }
   };
+
+  const handleAtenderCita = async (citaId) => {
+    const confirmacion = window.confirm("¿Estás seguro de que deseas modificar el estado de esta cita?");
+    if (confirmacion) {
+      try {
+        await axios.put(`http://localhost:8888/api/v1/devcamps/citas/cancelarCita/${citaId}`);
+        const updatedCitas = citas.map((cita) => {
+          if (cita._id === citaId) {
+            return {
+              ...cita,
+              estado: "atendida"
+            };
+          }
+          return cita;
+        });
+  
+        setCitas(updatedCitas);
+        setMensajeExito("Cita atendida con éxito.");
+      } catch (error) {
+        console.error("Error al cancelar la cita:", error);
+      }
+    }
+  };
+
+  
   return (
     <div>
          <nav className='menu'>
@@ -66,6 +91,7 @@ const Citas = () => {
               <th scope="col">Número de Documento</th>
               <th scope="col">Fecha de Cita</th>
               <th scope="col">Hora de Cita</th>
+              <th scope="col">Estado</th>
               <th scope="col">Eliminar</th>
             </tr>
           </thead>
@@ -77,9 +103,10 @@ const Citas = () => {
                 <td>{cita.numeroDocumento}</td>
                 <td>{cita.fechaCita}</td>
                 <td>{cita.horaCita}</td>
+                <td>{cita.estado}</td>
                 <td>
-                  <button className="eliminar" onClick={() => handleEliminarCita(cita._id)}>
-                    Eliminar
+                  <button className="editar" onClick={() => handleAtenderCita(cita._id)}>
+                    Atendida
                   </button>
                 </td>
               </tr>

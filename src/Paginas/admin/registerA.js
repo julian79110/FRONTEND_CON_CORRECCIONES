@@ -1,16 +1,21 @@
 import React, { useState,useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { FaBars } from 'react-icons/fa';
 
-
-const Register = () => {
+const RegisterA = () => {
+    const navigate = useNavigate();
+    const [menuOpen, setMenuOpen] = useState(false);
+    const toggleMenu = () => {
+        setMenuOpen(!menuOpen);
+      };
     const [usuario, setUsuario] = useState({
         name: '',
         email: '',
         numeroDoc: '',
         password: '',
         tipoDoc: '',
-        role: 'paciente',
+        role: '',
       });
 
       
@@ -56,15 +61,13 @@ const Register = () => {
       const validarNumeroDocumento = (name, value, tipoDoc) => {
         let regexPattern;
       
-        if (tipoDoc === 'cc') {
+        if (tipoDoc === 'cc' || tipoDoc ==='ti') {
           // Permitir solo números para cédula de ciudadanía
           regexPattern = /^\d+$/;
         } else if (tipoDoc === 'pp') {
           // Permitir números y letras para pasaporte
           regexPattern = /^[a-zA-Z0-9]+$/;
-        } else if (tipoDoc === 'ti') {
-          regexPattern = /^\d+$/;
-        }
+        } 
       
         if (!regexPattern.test(value)) {
           setError('Número de documento inválido');
@@ -75,10 +78,31 @@ const Register = () => {
         setError('');
         return true;
       };
+
+      const validarCorreo = (email) => {
+        // Expresión regular para validar el correo electrónico
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      
+        // Verificar si el correo electrónico cumple con el patrón
+        if (emailPattern.test(email)) {
+          // Si es válido, no hay error
+          setError('');
+          return true;
+        }
+      
+        // Si es inválido, mostrar un mensaje de error
+        setError('Correo electrónico no válido');
+        return false;
+      };
     
       const onChange = (e) => {
         const { name, value } = e.target;
+
+        if (name === 'email') {
+            validarCorreo(value);
+          }
       
+        // Validar el número de documento solo cuando se cambia el número de documento
         if (name === 'numeroDoc') {
           const isValid = validarNumeroDocumento(name, value, usuario.tipoDoc);
           if (!isValid) {
@@ -92,15 +116,33 @@ const Register = () => {
           ...usuario,
           [name]: value,
         });
+      
+        // Limpiar el mensaje de error después de una entrada válida
+        setError('');
       };
 
       const onSubmit = (e) => {
         e.preventDefault();
         handleRegister();
       };
+      const handleLogout = () => {
+        localStorage.removeItem('name');
+        localStorage.removeItem('token');
+        navigate('/');
+      };
   return (
-    <section>
-    <div className='form-container2'>
+    <div>
+        <nav className='menu'>
+        <label className='logo'>Admin</label>
+        <ul className={`menu_items ${menuOpen ? 'show' : ''}`}>
+          <li className='active'><Link to={"/admin"}>Inicio</Link></li>
+          <li><button onClick={handleLogout}>Cerrar Sesion</button></li>
+        </ul>
+        <span className={`btn_menu ${menuOpen ? 'hide' : ''}`} onClick={toggleMenu}>
+        <FaBars />
+        </span>
+      </nav>
+    <div className='form-containerA'>
         <h1>Registro</h1>
         {successMessage && (
         <div className='mensajeExito'>
@@ -124,7 +166,7 @@ const Register = () => {
                 </div>
                 <div className='control2'>
                 <label>Email</label>
-                <input type='email' name='email' id='email' onChange={onChange} value={email} required pattern='[^\s@]+@[^\s@]+\.[^\s@]+' title='Email Invalido agrega el .com o .co' />
+                <input type='email' name='email' id='email' onChange={onChange} value={email} required pattern='[^\s@]+@[^\s@]+\.[^\s@]+' title='Email Invalido' />
                 </div>
                 <div className='control2'>
                 <label>Contraseña</label>
@@ -136,7 +178,7 @@ const Register = () => {
             <div className='form-column'>
             <div className='control2'>
                 <select name="tipoDoc" value={tipoDoc} onChange={onChange}>
-                    <option value="" selected hidden>Tipo De Documento</option>
+                <option value="" selected hidden required>Tipo Documento</option>
                     <option value="ti">Tarjeta de identidad</option>
                     <option value="cc">cedula de ciudadania</option>
                     <option value="pp">pasaporte</option>
@@ -146,36 +188,26 @@ const Register = () => {
                 <label>Numero De Documento</label>
                 <input type='text' name='numeroDoc' id='doc' onChange={onChange} value={numeroDoc} required />
                 </div>
-                
-            </div>
-            </div>
 
-            {/* Tercer grupo de campos */}
-            <div className='form-row'>
-            <div className='form-column'>
-                
-            </div>
-            <div className='form-column'>
-            <div className='control2'>
-                  <input type="hidden" readOnly name="role" value={role} onChange={onChange}></input>
+                <div className='control2'>
+                  <select name="role" value={role} onChange={onChange}>
+                    <option value="" selected hidden required>Rol</option>
+                    <option value="paciente">Paciente</option>
+                    <option value="admin">Admin</option>
+                    <option value="doctor">Doctor</option>
+                  </select>
                 </div>
-            
+                
             </div>
             </div>
-
-            
 
             <div className='control2'>
-            <input type='submit' value='Registrarse' />
+            <input type='submit' value='Registrar' />
             </div>
         </form>
-
-        <div className='link2'>
-            <Link to={"/"}>Iniciar Sesion</Link>
         </div>
-        </div>
-    </section>
+    </div>
   );
 }
 
-export default Register;
+export default RegisterA;

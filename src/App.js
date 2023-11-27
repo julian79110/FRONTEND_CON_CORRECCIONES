@@ -9,6 +9,8 @@ import RegistroCita from './Paginas/clientes/registroCitas';
 import VerCitas from './Paginas/clientes/verCitas';
 import HomeA from './Paginas/admin/homeA';
 import ActualizarD from './Paginas/admin/actualizar';
+import RegisterA from './Paginas/admin/registerA';
+import VerU from './Paginas/admin/verU_admin';
 
 
 
@@ -26,6 +28,8 @@ function App() {
               <Route path="/verCitas" element={<VerCitas/>}></Route>
               <Route path="/admin" element={<HomeA/>}></Route>
               <Route path="/actualizar" element={<ActualizarD/>}></Route>
+              <Route path="/registerA" element={<RegisterA/>}></Route>
+              <Route path="/verUsuarios" element={<VerU/>}></Route>
           </Routes>
       </Router>
    </Fragment>

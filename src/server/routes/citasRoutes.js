@@ -38,54 +38,6 @@ router.get('/',
         }
 })
 
-//consulta especifica
-router.get('/:id',
-    async(request, response)=>{
-
-        try {
-            //traer el parametro id de la uri
-            
-            const bootcampId = request.params.id 
-            
-            if(!moongose.Types.ObjectId.isValid(bootcampId)){
-                response
-                .status(500)
-                .json({
-                    success: false,
-                    msg: "Id invalido"
-                })
-            }else{
-                const selected_bootcamp = await citasModel.findById(bootcampId)
-
-                if (!selected_bootcamp) {
-                    return response
-                        .status(404)
-                        .json({
-                            success: false,
-                            msg:`No se encuentra el bootcamp con id: ${bootcampId}`
-                        })
-                    
-                }
-                else{
-                    response
-                        .status(200)
-                        .json({
-                            "success": true, 
-                            "results": selected_bootcamp
-                        })
-                }
-            }
-            
-            
-        } catch (error) {
-            response
-                .status(500)
-                .json({
-                    success: false,
-                    msg: "Error interno del servidor"
-                })
-        }
-})
 
 //traer usuario a traves del numero de documento: 
 
@@ -141,7 +93,7 @@ router.get('/busquedaD/:doctorAsignado',
             if (!citasDoctor || citasDoctor.length === 0) {
                 return response.status(404).json({
                     success: false,
-                    msg: `No se encontraron citas para el usuario con número de documento ${citasDoctor}.`
+                    msg: `No se encontro el doctor.`
                 });
             }
 
@@ -159,7 +111,7 @@ router.get('/busquedaD/:doctorAsignado',
     }
 );
 
-router.post('/',
+router.post('/register',
      async(request, response)=>{
         try {
             // Crear la cita, asegurándote de incluir doctorAsignado en el objeto
@@ -183,99 +135,67 @@ router.post('/',
           }
 })
 
-//actualizar bootcamp por id
-router.put('/:id',
-  async (request, response)=>{
+//validar si el doctor se registro mas de 4 veces
+router.post('/validarDoctor',
+  async (request, response) => {
     try {
-        const bootcampId= request.params.id
+      const { doctorAsignado } = request.body;
 
-        if(!moongose.Types.ObjectId.isValid(bootcampId)){
-            response
-            .status(500)
-            .json({
-                success: false,
-                msg: "Id invalido"
-            })
-        }else{
-            const updBootcamp = await citasModel.findByIdAndUpdate(
-                bootcampId, 
-                request.body,
-                {
-                    new:true
-                }  
-            )
+      if (!doctorAsignado) {
+        return response.status(400).json({
+          success: false,
+          msg: "Se requiere el nombre del doctor para validar el límite de citas."
+        });
+      }
 
-            if (!updBootcamp) {
-                return response
-                    .status(404)
-                    .json({
-                        success: false,
-                        msg:`No se encuentra el bootcamp con id: ${bootcampId}`
-                    })
-                
-            }
-            else{
-                response
-                .status(200)
-                .json({
-                    "success": true, 
-                    "results": updBootcamp
-                })
-            }
-        }
-        
+      // Obtén las citas del doctor
+      const citasDoctor = await citasModel.find({ doctorAsignado: doctorAsignado });
+
+      // Valida el límite de citas
+      const excedeLimite = citasDoctor.length >= 4;
+
+      response.status(200).json({
+        success: true,
+        excedeLimite: excedeLimite
+      });
     } catch (error) {
-        response
-                .status(500)
-                .json({
-                    success: false,
-                    msg: "Error interno del servidor"
-                })   
+      console.error("Error interno del servidor:", error);
+      response.status(500).json({
+        success: false,
+        msg: "Error interno del servidor"
+      });
     }
-})
+  }
+);
 
-//eliminar bootcamp por id 
-router.delete('/:id',
-   async (request, response)=>{
-
+router.put('/cancelarCita/:citaId', async (request, response) => {
     try {
-
-        const bootcampId= request.params.id
-        if(!moongose.Types.ObjectId.isValid(bootcampId)){
-            response
-            .status(500)
-            .json({
-                success: false,
-                msg: "Id invalido"
-            })
-        }else{
-           const delBootcamp = await citasModel.findByIdAndDelete(bootcampId)
-
-           if (!delBootcamp) {
-                return response
-                    .status(404)
-                    .json({
-                        success: false,
-                        msg:`No se encuentra el bootcamp con id: ${bootcampId}`
-                    })
-           }else{
-            response
-                .status(200)
-                .json({
-                    "success": true, 
-                    "results":[]
-                })
-           }
-        }
-        
+      const { citaId } = request.params;
+      const cita = await citasModel.findById(citaId);
+  
+      if (!cita) {
+        return response.status(404).json({
+          success: false,
+          msg: "Cita no encontrada"
+        });
+      }
+  
+      // Cambiar el estado de la cita a "Cancelada"
+      cita.estado = "cancelada";
+      cita.doctorAsignado = "n/a"
+      await cita.save();
+  
+      response.status(200).json({
+        success: true,
+        msg: "Cita cancelada exitosamente"
+      });
     } catch (error) {
-        response
-                .status(500)
-                .json({
-                    success: false,
-                    msg: "Error interno del servidor"
-                })
+      console.error("Error al cancelar la cita:", error);
+      response.status(500).json({
+        success: false,
+        msg: "Error interno del servidor"
+      });
     }
-})
+  });
 
 module.exports = router 

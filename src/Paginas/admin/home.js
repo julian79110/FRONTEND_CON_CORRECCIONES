@@ -38,31 +38,7 @@ const Home = ({ userName }) => {
     }
   };
   
-  const handleUpdateProfile = async (e) => {
-    e.preventDefault();
-    const updatedData = {
-      name: e.target.name.value,
-      email: e.target.email.value,
-      password: e.target.password.value,
-      disponibilidad: e.target.disponibilidad.value === 'true',
-    };
-
-    try {
-      const response = await axios.patch(`http://localhost:8888/api/v1/devcamps/users/${doctorId}`, updatedData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (response.data && response.data.success) {
-        setDoctorData(response.data.data);
-        alert('Perfil actualizado exitosamente');
-      }
-    } catch (error) {
-      console.error('Error al actualizar el perfil:', error);
-      alert('Error al actualizar el perfil');
-    }
-  };
+  
 
 useEffect(() => {
     // Hacer la solicitud de datos del doctor cuando el componente se monta
